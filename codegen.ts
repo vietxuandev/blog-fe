@@ -1,9 +1,8 @@
-import { getStrapiURL } from '@/lib/media';
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: getStrapiURL('/graphql'),
+  schema: 'http://localhost:1337/graphql',
   documents: 'src/**/*.graphql',
   generates: {
     'src/generated/graphql.ts': {
@@ -13,7 +12,14 @@ const config: CodegenConfig = {
         'typescript-react-query',
       ],
       config: {
-        fetcher: '@/lib/fetcher#fetcher',
+        fetcher: {
+          endpoint: 'http://localhost:1337/graphql',
+          fetchParams: {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        },
         exposeFetcher: true,
         exposeQueryKeys: true,
         addInfiniteQuery: true,
