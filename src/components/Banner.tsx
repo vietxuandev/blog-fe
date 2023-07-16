@@ -38,6 +38,15 @@ export function Banner() {
         >
           {defaultSeo?.metaDescription}
         </Typography>
+        <Typography
+          sx={{
+            color: '#fff',
+            fontSize: '36px',
+            fontWeight: 700,
+          }}
+        >
+          Nơi chấp cánh những tâm hồn xa quê
+        </Typography>
       </Box>
       <Box
         position="absolute"
