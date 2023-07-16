@@ -1,0 +1,10 @@
+fragment Homepage on HomepageEntity {
+  attributes {
+    hero {
+      title
+    }
+    seo {
+      ...Seo
+    }
+  }
+}

@@ -1,0 +1,14 @@
+query Comments(
+  $pagination: PaginationArg
+  $filters: CommentFiltersInput
+  $sort: [String]
+) {
+  comments(pagination: $pagination, filters: $filters, sort: $sort) {
+    data {
+      ...Comment
+    }
+    meta {
+      ...Meta
+    }
+  }
+}

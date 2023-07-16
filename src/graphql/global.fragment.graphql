@@ -1,0 +1,18 @@
+fragment Global on GlobalEntity {
+  attributes {
+    siteName
+    favicon {
+      data {
+        ...File
+      }
+    }
+    defaultSeo {
+      ...Seo
+    }
+    banner {
+      data {
+        ...File
+      }
+    }
+  }
+}

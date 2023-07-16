@@ -1,0 +1,14 @@
+fragment Chap on ChapEntity {
+  id
+  attributes {
+    slug
+    description
+    title
+    image {
+      data {
+        ...File
+      }
+    }
+    publishedAt
+  }
+}

@@ -1,0 +1,15 @@
+fragment Article on ArticleEntity {
+  id
+  attributes {
+    slug
+    content
+    description
+    title
+    image {
+      data {
+        ...File
+      }
+    }
+    publishedAt
+  }
+}

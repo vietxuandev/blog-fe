@@ -1,0 +1,9 @@
+fragment Seo on ComponentSharedSeo {
+  metaTitle
+  metaDescription
+  shareImage {
+    data {
+      ...File
+    }
+  }
+}

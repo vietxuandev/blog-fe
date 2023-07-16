@@ -1,0 +1,5 @@
+fragment About on AboutEntity {
+  attributes {
+    content
+  }
+}

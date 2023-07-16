@@ -1,0 +1,7 @@
+query Global {
+  global {
+    data {
+      ...Global
+    }
+  }
+}

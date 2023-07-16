@@ -1,0 +1,8 @@
+fragment Comment on CommentEntity {
+  id
+  attributes {
+    name
+    content
+    createdAt
+  }
+}

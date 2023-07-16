@@ -1,0 +1,14 @@
+query Chaps(
+  $pagination: PaginationArg
+  $filters: ChapFiltersInput
+  $sort: [String]
+) {
+  chaps(pagination: $pagination, filters: $filters, sort: $sort) {
+    data {
+      ...Chap
+    }
+    meta {
+      ...Meta
+    }
+  }
+}
