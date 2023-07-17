@@ -26,29 +26,28 @@ export function Banner() {
         }}
       >
         <Typography
-          variant="h1"
-          fontFamily="Bladekill"
-          color="white"
-          position="relative"
-          textAlign="center"
-          sx={{
-            textShadow: '5px 5px 8px black',
-            p: 2,
-          }}
-        >
-          {defaultSeo?.metaDescription}
-        </Typography>
-        <Typography
           color="white"
           position="relative"
           textAlign="center"
           fontWeight="bold"
           fontSize="36px"
           sx={{
-            p: 2,
+            px: 2,
           }}
         >
-          Nơi chấp cánh những tâm hồn xa quê
+          Trang Văn Học địa phương
+        </Typography>
+        <Typography
+          variant="h1"
+          fontFamily="Bladekill"
+          color="white"
+          position="relative"
+          sx={{
+            textShadow: '5px 5px 8px black',
+            px: 2,
+          }}
+        >
+          {defaultSeo?.metaDescription}
         </Typography>
       </Box>
       <Box

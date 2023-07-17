@@ -5,7 +5,6 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Box, CardActionArea } from '@mui/material';
 import Link from './Link';
-import dayjs from 'dayjs';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 interface ChapCardProps {
@@ -31,7 +30,8 @@ export function ChapCard({
           subheader={
             <Box display="flex" alignItems="center">
               <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
-              {dayjs(publishedAt).subtract(1, 'year').format('DD/MM/YYYY')}
+              {/* {dayjs(publishedAt).subtract(1, 'year').format('DD/MM/YYYY')} */}
+              02/01/2022
             </Box>
           }
         />
