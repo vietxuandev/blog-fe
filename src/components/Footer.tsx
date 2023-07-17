@@ -27,7 +27,7 @@ export function Footer() {
             </Typography>
             <Typography variant="body2">
               Địa chỉ Trường THCS Châu Thành 58 Trần Hưng Đạo Phường 1 TP Vũng
-              Tàu tỉnh Bà Rịa - Vũng Tàu
+              Tàu tỉnh Bà Rịa - Vũng Tàu.
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
