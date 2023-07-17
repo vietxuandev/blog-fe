@@ -35,7 +35,7 @@ export function Banner() {
             px: 2,
           }}
         >
-          Trang Văn Học địa phương
+          Trang Văn học địa phương
         </Typography>
         <Typography
           variant="h1"

@@ -26,18 +26,15 @@ export function Footer() {
               Địa chỉ:
             </Typography>
             <Typography variant="body2">
-              Cơ sở 1: Ấp 6, xã Tóc Tiên, thị xã Phú Mỹ, tỉnh BR-VT
-            </Typography>
-            <Typography variant="body2">
-              Cơ sở 2: Tỉnh lộ 44 Ấp An Thạnh, xã An Ngãi, H. Long Điền, tỉnh
-              BR-VT
+              Địa chỉ Trường THCS Châu Thành 58 Trần Hưng Đạo Phường 1 TP Vũng
+              Tàu
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography fontWeight={500}>Liên hệ:</Typography>
-            <Typography variant="body2">Điện thoại: (0254)3 xxx xxx</Typography>
+            <Typography variant="body2">Điện thoại: 0941865859</Typography>
             <Typography variant="body2">
-              Email: txh@soldtbxh.baria-vungtau.gov.vn
+              Email: nhungngovt88@gmail.com
             </Typography>
           </Grid>
         </Grid>
