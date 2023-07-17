@@ -42,6 +42,7 @@ export function Banner() {
           fontFamily="Bladekill"
           color="white"
           position="relative"
+          textAlign="center"
           sx={{
             textShadow: '5px 5px 8px black',
             px: 2,
