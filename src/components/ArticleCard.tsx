@@ -30,7 +30,7 @@ export function ArticleCard({
         subheader={
           <Box display="flex" alignItems="center">
             <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
-            {dayjs(publishedAt).format('DD/MM/YYYY')}
+            {dayjs(publishedAt).subtract(1, 'year').format('DD/MM/YYYY')}
           </Box>
         }
       />

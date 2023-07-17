@@ -39,10 +39,13 @@ export function Banner() {
           {defaultSeo?.metaDescription}
         </Typography>
         <Typography
+          color="white"
+          position="relative"
+          textAlign="center"
+          fontWeight="bold"
+          fontSize="36px"
           sx={{
-            color: '#fff',
-            fontSize: '36px',
-            fontWeight: 700,
+            p: 2,
           }}
         >
           Nơi chấp cánh những tâm hồn xa quê
