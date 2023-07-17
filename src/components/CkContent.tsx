@@ -13,7 +13,7 @@ export const CkContent: FC<CkContentProps> = ({ content }) => {
     <div
       className="ck-content"
       dangerouslySetInnerHTML={{
-        __html: content.replace('/uploads', getStrapiURL('/uploads')),
+        __html: content.replaceAll('/uploads', getStrapiURL('/uploads')),
       }}
     />
   );
