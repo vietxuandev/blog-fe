@@ -1,11 +1,21 @@
 import { CkContent } from '@/components/CkContent';
 // import { getStaticPropsFunc } from '@/lib/next-static-props';
 import { useAboutQuery } from '@/generated/graphql';
+import { Typography } from '@mui/material';
 
 export default function AboutPage() {
   const { data } = useAboutQuery();
   return (
     <>
+      <Typography
+        mt={2}
+        variant="h4"
+        component="h4"
+        sx={{ textAlign: 'center' }}
+        fontWeight="bold"
+      >
+        Giới thiệu
+      </Typography>
       <CkContent content={data?.about?.data?.attributes?.content} />
     </>
   );
