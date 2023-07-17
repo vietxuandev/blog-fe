@@ -1,5 +1,5 @@
 import { CkContent } from '@/components/CkContent';
-import { getStaticPropsFunc } from '@/lib/next-static-props';
+// import { getStaticPropsFunc } from '@/lib/next-static-props';
 import { useAboutQuery } from '@/generated/graphql';
 
 export default function AboutPage() {
@@ -11,11 +11,11 @@ export default function AboutPage() {
   );
 }
 
-export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
-  await queryClient.prefetchQuery(
-    useAboutQuery.getKey(),
-    useAboutQuery.fetcher()
-  );
+// export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
+//   await queryClient.prefetchQuery(
+//     useAboutQuery.getKey(),
+//     useAboutQuery.fetcher()
+//   );
 
-  return {};
-});
+//   return {};
+// });
