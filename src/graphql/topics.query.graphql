@@ -1,0 +1,14 @@
+query Topics(
+  $pagination: PaginationArg
+  $filters: TopicFiltersInput
+  $sort: [String]
+) {
+  topics(pagination: $pagination, filters: $filters, sort: $sort) {
+    data {
+      ...Topic
+    }
+    meta {
+      ...Meta
+    }
+  }
+}

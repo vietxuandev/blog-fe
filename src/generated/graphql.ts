@@ -92,6 +92,7 @@ export type Article = {
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
   slug: Scalars['String']['output'];
   title: Scalars['String']['output'];
+  topic?: Maybe<TopicEntityResponse>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -131,6 +132,7 @@ export type ArticleFiltersInput = {
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   slug?: InputMaybe<StringFilterInput>;
   title?: InputMaybe<StringFilterInput>;
+  topic?: InputMaybe<TopicFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
@@ -143,6 +145,7 @@ export type ArticleInput = {
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+  topic?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ArticleRelationResponseCollection = {
@@ -183,11 +186,19 @@ export type Chap = {
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
   slug: Scalars['String']['output'];
   title: Scalars['String']['output'];
+  topics?: Maybe<TopicRelationResponseCollection>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ChapArticlesArgs = {
   filters?: InputMaybe<ArticleFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type ChapTopicsArgs = {
+  filters?: InputMaybe<TopicFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -221,6 +232,7 @@ export type ChapFiltersInput = {
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   slug?: InputMaybe<StringFilterInput>;
   title?: InputMaybe<StringFilterInput>;
+  topics?: InputMaybe<TopicFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
@@ -231,6 +243,7 @@ export type ChapInput = {
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+  topics?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
 };
 
 export type Comment = {
@@ -372,6 +385,7 @@ export type GenericMorph =
   | Global
   | Homepage
   | I18NLocale
+  | Topic
   | UploadFile
   | UploadFolder
   | UsersPermissionsPermission
@@ -545,6 +559,7 @@ export type Mutation = {
   createArticle?: Maybe<ArticleEntityResponse>;
   createChap?: Maybe<ChapEntityResponse>;
   createComment?: Maybe<CommentEntityResponse>;
+  createTopic?: Maybe<TopicEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Create a new role */
@@ -557,6 +572,7 @@ export type Mutation = {
   deleteComment?: Maybe<CommentEntityResponse>;
   deleteGlobal?: Maybe<GlobalEntityResponse>;
   deleteHomepage?: Maybe<HomepageEntityResponse>;
+  deleteTopic?: Maybe<TopicEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Delete an existing role */
@@ -581,6 +597,7 @@ export type Mutation = {
   updateFileInfo: UploadFileEntityResponse;
   updateGlobal?: Maybe<GlobalEntityResponse>;
   updateHomepage?: Maybe<HomepageEntityResponse>;
+  updateTopic?: Maybe<TopicEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Update an existing role */
@@ -608,6 +625,10 @@ export type MutationCreateCommentArgs = {
   data: CommentInput;
 };
 
+export type MutationCreateTopicArgs = {
+  data: TopicInput;
+};
+
 export type MutationCreateUploadFileArgs = {
   data: UploadFileInput;
 };
@@ -633,6 +654,10 @@ export type MutationDeleteChapArgs = {
 };
 
 export type MutationDeleteCommentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteTopicArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -717,6 +742,11 @@ export type MutationUpdateHomepageArgs = {
   data: HomepageInput;
 };
 
+export type MutationUpdateTopicArgs = {
+  data: TopicInput;
+  id: Scalars['ID']['input'];
+};
+
 export type MutationUpdateUploadFileArgs = {
   data: UploadFileInput;
   id: Scalars['ID']['input'];
@@ -779,6 +809,8 @@ export type Query = {
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   me?: Maybe<UsersPermissionsMe>;
+  topic?: Maybe<TopicEntityResponse>;
+  topics?: Maybe<TopicEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
   uploadFiles?: Maybe<UploadFileEntityResponseCollection>;
   uploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -828,6 +860,17 @@ export type QueryI18NLocaleArgs = {
 export type QueryI18NLocalesArgs = {
   filters?: InputMaybe<I18NLocaleFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type QueryTopicArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type QueryTopicsArgs = {
+  filters?: InputMaybe<TopicFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
@@ -898,6 +941,73 @@ export type StringFilterInput = {
   null?: InputMaybe<Scalars['Boolean']['input']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   startsWith?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Topic = {
+  __typename?: 'Topic';
+  articles?: Maybe<ArticleRelationResponseCollection>;
+  chap?: Maybe<ChapEntityResponse>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description: Scalars['String']['output'];
+  image: UploadFileEntityResponse;
+  publishedAt?: Maybe<Scalars['DateTime']['output']>;
+  slug: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type TopicArticlesArgs = {
+  filters?: InputMaybe<ArticleFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type TopicEntity = {
+  __typename?: 'TopicEntity';
+  attributes?: Maybe<Topic>;
+  id?: Maybe<Scalars['ID']['output']>;
+};
+
+export type TopicEntityResponse = {
+  __typename?: 'TopicEntityResponse';
+  data?: Maybe<TopicEntity>;
+};
+
+export type TopicEntityResponseCollection = {
+  __typename?: 'TopicEntityResponseCollection';
+  data: Array<TopicEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type TopicFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<TopicFiltersInput>>>;
+  articles?: InputMaybe<ArticleFiltersInput>;
+  chap?: InputMaybe<ChapFiltersInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  description?: InputMaybe<StringFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<TopicFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<TopicFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  slug?: InputMaybe<StringFilterInput>;
+  title?: InputMaybe<StringFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type TopicInput = {
+  articles?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  chap?: InputMaybe<Scalars['ID']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['ID']['input']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TopicRelationResponseCollection = {
+  __typename?: 'TopicRelationResponseCollection';
+  data: Array<TopicEntity>;
 };
 
 export type UploadFile = {
@@ -1748,6 +1858,85 @@ export type SeoFragment = {
   } | null;
 };
 
+export type TopicFragment = {
+  __typename?: 'TopicEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Topic';
+    slug: string;
+    description: string;
+    title: string;
+    publishedAt?: any | null;
+    image: {
+      __typename?: 'UploadFileEntityResponse';
+      data?: {
+        __typename?: 'UploadFileEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'UploadFile';
+          url: string;
+          width?: number | null;
+          height?: number | null;
+          alternativeText?: string | null;
+          name: string;
+        } | null;
+      } | null;
+    };
+  } | null;
+};
+
+export type TopicsQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+  filters?: InputMaybe<TopicFiltersInput>;
+  sort?: InputMaybe<
+    | Array<InputMaybe<Scalars['String']['input']>>
+    | InputMaybe<Scalars['String']['input']>
+  >;
+}>;
+
+export type TopicsQuery = {
+  __typename?: 'Query';
+  topics?: {
+    __typename?: 'TopicEntityResponseCollection';
+    data: Array<{
+      __typename?: 'TopicEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Topic';
+        slug: string;
+        description: string;
+        title: string;
+        publishedAt?: any | null;
+        image: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              width?: number | null;
+              height?: number | null;
+              alternativeText?: string | null;
+              name: string;
+            } | null;
+          } | null;
+        };
+      } | null;
+    }>;
+    meta: {
+      __typename?: 'ResponseCollectionMeta';
+      pagination: {
+        __typename?: 'Pagination';
+        page: number;
+        total: number;
+        pageSize: number;
+        pageCount: number;
+      };
+    };
+  } | null;
+};
+
 export const AboutFragmentDoc = `
     fragment About on AboutEntity {
   attributes {
@@ -1860,6 +2049,22 @@ export const MetaFragmentDoc = `
     total
     pageSize
     pageCount
+  }
+}
+    `;
+export const TopicFragmentDoc = `
+    fragment Topic on TopicEntity {
+  id
+  attributes {
+    slug
+    description
+    title
+    image {
+      data {
+        ...File
+      }
+    }
+    publishedAt
   }
 }
     `;
@@ -2188,3 +2393,52 @@ useInfiniteHomepageQuery.getKey = (variables?: HomepageQueryVariables) =>
     : ['Homepage.infinite', variables];
 useHomepageQuery.fetcher = (variables?: HomepageQueryVariables) =>
   fetcher<HomepageQuery, HomepageQueryVariables>(HomepageDocument, variables);
+export const TopicsDocument = `
+    query Topics($pagination: PaginationArg, $filters: TopicFiltersInput, $sort: [String]) {
+  topics(pagination: $pagination, filters: $filters, sort: $sort) {
+    data {
+      ...Topic
+    }
+    meta {
+      ...Meta
+    }
+  }
+}
+    ${TopicFragmentDoc}
+${FileFragmentDoc}
+${MetaFragmentDoc}`;
+export const useTopicsQuery = <TData = TopicsQuery, TError = unknown>(
+  variables?: TopicsQueryVariables,
+  options?: UseQueryOptions<TopicsQuery, TError, TData>
+) =>
+  useQuery<TopicsQuery, TError, TData>(
+    variables === undefined ? ['Topics'] : ['Topics', variables],
+    fetcher<TopicsQuery, TopicsQueryVariables>(TopicsDocument, variables),
+    options
+  );
+
+useTopicsQuery.getKey = (variables?: TopicsQueryVariables) =>
+  variables === undefined ? ['Topics'] : ['Topics', variables];
+export const useInfiniteTopicsQuery = <TData = TopicsQuery, TError = unknown>(
+  pageParamKey: keyof TopicsQueryVariables,
+  variables?: TopicsQueryVariables,
+  options?: UseInfiniteQueryOptions<TopicsQuery, TError, TData>
+) =>
+  useInfiniteQuery<TopicsQuery, TError, TData>(
+    variables === undefined
+      ? ['Topics.infinite']
+      : ['Topics.infinite', variables],
+    (metaData) =>
+      fetcher<TopicsQuery, TopicsQueryVariables>(TopicsDocument, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
+    options
+  );
+
+useInfiniteTopicsQuery.getKey = (variables?: TopicsQueryVariables) =>
+  variables === undefined
+    ? ['Topics.infinite']
+    : ['Topics.infinite', variables];
+useTopicsQuery.fetcher = (variables?: TopicsQueryVariables) =>
+  fetcher<TopicsQuery, TopicsQueryVariables>(TopicsDocument, variables);

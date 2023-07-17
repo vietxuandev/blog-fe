@@ -1,8 +1,8 @@
 import { TopicCard } from '@/components/TopicCard';
 import {
+  useArticlesQuery,
   useTopicsQuery,
-  useChapsQuery,
-  useInfiniteTopicsQuery,
+  useInfiniteArticlesQuery,
 } from '@/generated/graphql';
 import { Box, Card, Grid, Typography } from '@mui/material';
 import { QueryClient } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { Seo } from '@/components/Seo';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useEffect, useRef } from 'react';
 import { NextImage } from '@/components/NextImage';
+import { ArticleCard } from '@/components/ArticleCard';
 
 const pageSize = 20;
 
@@ -21,22 +22,22 @@ const pagination = {
   pageSize,
 };
 
-export default function ChapDetail() {
+export default function TopicDetail() {
   const router = useRouter();
 
   const { slug } = router.query;
 
-  const { data } = useChapsQuery({
+  const { data } = useTopicsQuery({
     filters: {
       slug: { eq: String(slug) },
     },
   });
 
-  const { data: topicsData, fetchNextPage } = useInfiniteTopicsQuery(
+  const { data: articlesData, fetchNextPage } = useInfiniteArticlesQuery(
     'pagination',
     {
       filters: {
-        chap: {
+        topic: {
           slug: { eq: String(slug) },
         },
       },
@@ -45,12 +46,12 @@ export default function ChapDetail() {
     },
     {
       getNextPageParam(lastPage) {
-        const page = lastPage.topics?.meta.pagination.page ?? 0;
-        const pageCount = lastPage.topics?.meta.pagination.pageCount ?? 0;
+        const page = lastPage.articles?.meta.pagination.page ?? 0;
+        const pageCount = lastPage.articles?.meta.pagination.pageCount ?? 0;
         if (page < pageCount) {
           return {
             pagination: {
-              page: (lastPage.topics?.meta.pagination.page ?? 0) + 1,
+              page: (lastPage.articles?.meta.pagination.page ?? 0) + 1,
               pageSize,
             },
           };
@@ -66,9 +67,9 @@ export default function ChapDetail() {
   const isVisible = !!entry?.isIntersecting;
 
   const seo = {
-    metaTitle: data?.chaps?.data?.[0].attributes?.title ?? '',
-    metaDescription: data?.chaps?.data?.[0].attributes?.description ?? '',
-    shareImage: data?.chaps?.data?.[0].attributes?.image,
+    metaTitle: data?.topics?.data?.[0].attributes?.title ?? '',
+    metaDescription: data?.topics?.data?.[0].attributes?.description ?? '',
+    shareImage: data?.topics?.data?.[0].attributes?.image,
     article: true,
   };
 
@@ -81,24 +82,24 @@ export default function ChapDetail() {
   return (
     <>
       <Seo seo={seo} />
-      {data?.chaps?.data?.[0].attributes?.image?.data && (
+      {data?.topics?.data?.[0].attributes?.image?.data && (
         <Card sx={{ position: 'relative', height: 400 }}>
-          <NextImage image={data.chaps.data[0].attributes.image.data} />
+          <NextImage image={data.topics.data[0].attributes.image.data} />
         </Card>
       )}
       <Box mb={2}>
         <Typography mt={2} variant="h5" component="h5" fontWeight="bold">
-          {data?.chaps?.data?.[0].attributes?.title ?? ''}
+          {data?.topics?.data?.[0].attributes?.title ?? ''}
         </Typography>
         <Typography variant="body2">
-          {data?.chaps?.data?.[0].attributes?.description ?? ''}
+          {data?.topics?.data?.[0].attributes?.description ?? ''}
         </Typography>
       </Box>
       <Grid container spacing={2}>
-        {topicsData?.pages.map((page) =>
-          page.topics?.data.map((article) => (
+        {articlesData?.pages.map((page) =>
+          page.articles?.data.map((article) => (
             <Grid key={article.id} item xs={12} sm={6} md={4} lg={3}>
-              <TopicCard
+              <ArticleCard
                 title={article.attributes?.title ?? ''}
                 description={article.attributes?.description ?? ''}
                 slug={article.attributes?.slug ?? ''}
@@ -117,13 +118,13 @@ export default function ChapDetail() {
 export const getStaticPaths = async () => {
   const queryClient = new QueryClient();
 
-  const topicsData = await queryClient.fetchQuery(
-    useChapsQuery.getKey(),
-    useChapsQuery.fetcher()
+  const articlesData = await queryClient.fetchQuery(
+    useTopicsQuery.getKey(),
+    useTopicsQuery.fetcher()
   );
 
   return {
-    paths: (topicsData.chaps?.data ?? []).map((chap) => ({
+    paths: (articlesData.topics?.data ?? []).map((chap) => ({
       params: {
         slug: chap.attributes?.slug ?? '',
       },
@@ -140,7 +141,7 @@ export const getStaticProps = getStaticPropsFunc(
       },
     };
 
-    const topicsVariables = {
+    const articlesVariables = {
       filters: {
         chap: { slug: { eq: params?.slug } },
       },
@@ -148,13 +149,13 @@ export const getStaticProps = getStaticPropsFunc(
     };
 
     await queryClient.prefetchQuery(
-      useChapsQuery.getKey(variables),
-      useChapsQuery.fetcher(variables)
+      useTopicsQuery.getKey(variables),
+      useTopicsQuery.fetcher(variables)
     );
 
     await queryClient.prefetchQuery(
-      useTopicsQuery.getKey(topicsVariables),
-      useTopicsQuery.fetcher(topicsVariables)
+      useArticlesQuery.getKey(articlesVariables),
+      useArticlesQuery.fetcher(articlesVariables)
     );
     return {};
   }
