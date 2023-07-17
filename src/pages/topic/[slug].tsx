@@ -1,13 +1,13 @@
 import {
-  useArticlesQuery,
+  // useArticlesQuery,
   useTopicsQuery,
   useInfiniteArticlesQuery,
 } from '@/generated/graphql';
 import { Box, Card, Grid, Typography } from '@mui/material';
-import { QueryClient } from '@tanstack/react-query';
+// import { QueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { getStrapiFile } from '@/lib/media';
-import { getStaticPropsFunc } from '@/lib/next-static-props';
+// import { getStaticPropsFunc } from '@/lib/next-static-props';
 import { Seo } from '@/components/Seo';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useEffect, useRef } from 'react';
@@ -114,48 +114,48 @@ export default function TopicDetail() {
   );
 }
 
-export const getStaticPaths = async () => {
-  const queryClient = new QueryClient();
+// export const getStaticPaths = async () => {
+//   const queryClient = new QueryClient();
 
-  const articlesData = await queryClient.fetchQuery(
-    useTopicsQuery.getKey(),
-    useTopicsQuery.fetcher()
-  );
+//   const articlesData = await queryClient.fetchQuery(
+//     useTopicsQuery.getKey(),
+//     useTopicsQuery.fetcher()
+//   );
 
-  return {
-    paths: (articlesData.topics?.data ?? []).map((chap) => ({
-      params: {
-        slug: chap.attributes?.slug ?? '',
-      },
-    })),
-    fallback: false,
-  };
-};
+//   return {
+//     paths: (articlesData.topics?.data ?? []).map((chap) => ({
+//       params: {
+//         slug: chap.attributes?.slug ?? '',
+//       },
+//     })),
+//     fallback: false,
+//   };
+// };
 
-export const getStaticProps = getStaticPropsFunc(
-  async ({ queryClient, params }) => {
-    const variables = {
-      filters: {
-        slug: { eq: params?.slug },
-      },
-    };
+// export const getStaticProps = getStaticPropsFunc(
+//   async ({ queryClient, params }) => {
+//     const variables = {
+//       filters: {
+//         slug: { eq: params?.slug },
+//       },
+//     };
 
-    const articlesVariables = {
-      filters: {
-        chap: { slug: { eq: params?.slug } },
-      },
-      pagination,
-    };
+//     const articlesVariables = {
+//       filters: {
+//         chap: { slug: { eq: params?.slug } },
+//       },
+//       pagination,
+//     };
 
-    await queryClient.prefetchQuery(
-      useTopicsQuery.getKey(variables),
-      useTopicsQuery.fetcher(variables)
-    );
+//     await queryClient.prefetchQuery(
+//       useTopicsQuery.getKey(variables),
+//       useTopicsQuery.fetcher(variables)
+//     );
 
-    await queryClient.prefetchQuery(
-      useArticlesQuery.getKey(articlesVariables),
-      useArticlesQuery.fetcher(articlesVariables)
-    );
-    return {};
-  }
-);
+//     await queryClient.prefetchQuery(
+//       useArticlesQuery.getKey(articlesVariables),
+//       useArticlesQuery.fetcher(articlesVariables)
+//     );
+//     return {};
+//   }
+// );

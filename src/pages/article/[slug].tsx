@@ -5,7 +5,7 @@ import {
   useCommentsQuery,
   useCreateCommentMutation,
 } from '@/generated/graphql';
-import { getStaticPropsFunc } from '@/lib/next-static-props';
+// import { getStaticPropsFunc } from '@/lib/next-static-props';
 import {
   Box,
   Button,
@@ -15,7 +15,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { QueryClient } from '@tanstack/react-query';
+// import { QueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -153,36 +153,36 @@ export default function ArticleDetail() {
   );
 }
 
-export const getStaticPaths = async () => {
-  const queryClient = new QueryClient();
-  const data = await queryClient.fetchQuery(
-    useArticlesQuery.getKey(),
-    useArticlesQuery.fetcher()
-  );
+// export const getStaticPaths = async () => {
+//   const queryClient = new QueryClient();
+//   const data = await queryClient.fetchQuery(
+//     useArticlesQuery.getKey(),
+//     useArticlesQuery.fetcher()
+//   );
 
-  return {
-    paths: (data.articles?.data ?? []).map((article) => ({
-      params: {
-        slug: article.attributes?.slug ?? '',
-      },
-    })),
-    fallback: false,
-  };
-};
+//   return {
+//     paths: (data.articles?.data ?? []).map((article) => ({
+//       params: {
+//         slug: article.attributes?.slug ?? '',
+//       },
+//     })),
+//     fallback: false,
+//   };
+// };
 
-export const getStaticProps = getStaticPropsFunc(
-  async ({ queryClient, params }) => {
-    const variables = {
-      filters: {
-        chap: { slug: { eq: params?.slug } },
-      },
-    };
+// export const getStaticProps = getStaticPropsFunc(
+//   async ({ queryClient, params }) => {
+//     const variables = {
+//       filters: {
+//         chap: { slug: { eq: params?.slug } },
+//       },
+//     };
 
-    await queryClient.prefetchQuery(
-      useArticlesQuery.getKey(variables),
-      useArticlesQuery.fetcher(variables)
-    );
+//     await queryClient.prefetchQuery(
+//       useArticlesQuery.getKey(variables),
+//       useArticlesQuery.fetcher(variables)
+//     );
 
-    return {};
-  }
-);
+//     return {};
+//   }
+// );
