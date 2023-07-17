@@ -1,4 +1,3 @@
-import { TopicCard } from '@/components/TopicCard';
 import {
   useArticlesQuery,
   useTopicsQuery,
