@@ -83,7 +83,6 @@ export type AboutInput = {
 
 export type Article = {
   __typename?: 'Article';
-  chap?: Maybe<ChapEntityResponse>;
   comments?: Maybe<CommentRelationResponseCollection>;
   content: Scalars['String']['output'];
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -121,7 +120,6 @@ export type ArticleEntityResponseCollection = {
 
 export type ArticleFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ArticleFiltersInput>>>;
-  chap?: InputMaybe<ChapFiltersInput>;
   comments?: InputMaybe<CommentFiltersInput>;
   content?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
@@ -137,7 +135,6 @@ export type ArticleFiltersInput = {
 };
 
 export type ArticleInput = {
-  chap?: InputMaybe<Scalars['ID']['input']>;
   comments?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   content?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -179,7 +176,6 @@ export type BooleanFilterInput = {
 
 export type Chap = {
   __typename?: 'Chap';
-  articles?: Maybe<ArticleRelationResponseCollection>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   description: Scalars['String']['output'];
   image: UploadFileEntityResponse;
@@ -188,13 +184,6 @@ export type Chap = {
   title: Scalars['String']['output'];
   topics?: Maybe<TopicRelationResponseCollection>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-export type ChapArticlesArgs = {
-  filters?: InputMaybe<ArticleFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type ChapTopicsArgs = {
@@ -223,7 +212,6 @@ export type ChapEntityResponseCollection = {
 
 export type ChapFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ChapFiltersInput>>>;
-  articles?: InputMaybe<ArticleFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   description?: InputMaybe<StringFilterInput>;
   id?: InputMaybe<IdFilterInput>;
@@ -237,7 +225,6 @@ export type ChapFiltersInput = {
 };
 
 export type ChapInput = {
-  articles?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   description?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['ID']['input']>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -1826,6 +1813,45 @@ export type HomepageQuery = {
   } | null;
 };
 
+export type MenuQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MenuQuery = {
+  __typename?: 'Query';
+  chaps?: {
+    __typename?: 'ChapEntityResponseCollection';
+    data: Array<{
+      __typename?: 'ChapEntity';
+      attributes?: {
+        __typename?: 'Chap';
+        title: string;
+        slug: string;
+        topics?: {
+          __typename?: 'TopicRelationResponseCollection';
+          data: Array<{
+            __typename?: 'TopicEntity';
+            attributes?: {
+              __typename?: 'Topic';
+              title: string;
+              slug: string;
+              articles?: {
+                __typename?: 'ArticleRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'ArticleEntity';
+                  attributes?: {
+                    __typename?: 'Article';
+                    title: string;
+                    slug: string;
+                  } | null;
+                }>;
+              } | null;
+            } | null;
+          }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
 export type MetaFragment = {
   __typename?: 'ResponseCollectionMeta';
   pagination: {
@@ -2393,6 +2419,65 @@ useInfiniteHomepageQuery.getKey = (variables?: HomepageQueryVariables) =>
     : ['Homepage.infinite', variables];
 useHomepageQuery.fetcher = (variables?: HomepageQueryVariables) =>
   fetcher<HomepageQuery, HomepageQueryVariables>(HomepageDocument, variables);
+export const MenuDocument = `
+    query Menu {
+  chaps {
+    data {
+      attributes {
+        title
+        slug
+        topics {
+          data {
+            attributes {
+              title
+              slug
+              articles {
+                data {
+                  attributes {
+                    title
+                    slug
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const useMenuQuery = <TData = MenuQuery, TError = unknown>(
+  variables?: MenuQueryVariables,
+  options?: UseQueryOptions<MenuQuery, TError, TData>
+) =>
+  useQuery<MenuQuery, TError, TData>(
+    variables === undefined ? ['Menu'] : ['Menu', variables],
+    fetcher<MenuQuery, MenuQueryVariables>(MenuDocument, variables),
+    options
+  );
+
+useMenuQuery.getKey = (variables?: MenuQueryVariables) =>
+  variables === undefined ? ['Menu'] : ['Menu', variables];
+export const useInfiniteMenuQuery = <TData = MenuQuery, TError = unknown>(
+  pageParamKey: keyof MenuQueryVariables,
+  variables?: MenuQueryVariables,
+  options?: UseInfiniteQueryOptions<MenuQuery, TError, TData>
+) =>
+  useInfiniteQuery<MenuQuery, TError, TData>(
+    variables === undefined ? ['Menu.infinite'] : ['Menu.infinite', variables],
+    (metaData) =>
+      fetcher<MenuQuery, MenuQueryVariables>(MenuDocument, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
+    options
+  );
+
+useInfiniteMenuQuery.getKey = (variables?: MenuQueryVariables) =>
+  variables === undefined ? ['Menu.infinite'] : ['Menu.infinite', variables];
+useMenuQuery.fetcher = (variables?: MenuQueryVariables) =>
+  fetcher<MenuQuery, MenuQueryVariables>(MenuDocument, variables);
 export const TopicsDocument = `
     query Topics($pagination: PaginationArg, $filters: TopicFiltersInput, $sort: [String]) {
   topics(pagination: $pagination, filters: $filters, sort: $sort) {

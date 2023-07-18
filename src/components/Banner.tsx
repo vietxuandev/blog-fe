@@ -32,6 +32,8 @@ export function Banner() {
           fontWeight="bold"
           fontSize="36px"
           sx={{
+            textShadow: (theme) =>
+              `2px 0 ${theme.palette.primary.main}, -2px 0 ${theme.palette.primary.main}, 0 2px ${theme.palette.primary.main}, 0 -2px ${theme.palette.primary.main}, 1px 1px ${theme.palette.primary.main}, -1px -1px ${theme.palette.primary.main}, 1px -1px ${theme.palette.primary.main}, -1px 1px ${theme.palette.primary.main}`,
             px: 2,
           }}
         >

@@ -22,6 +22,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { NextImage } from '@/components/NextImage';
 import { Seo } from '@/components/Seo';
+import { FacebookShareButton } from 'react-share';
+import { Facebook } from '@mui/icons-material';
 
 type Comment = { name: string; content: string };
 
@@ -88,7 +90,7 @@ export default function ArticleDetail() {
     <>
       <Seo seo={seo} />
       {data?.articles?.data?.[0].attributes?.image?.data && (
-        <Card sx={{ position: 'relative', height: 400 }}>
+        <Card sx={{ position: 'relative', height: 600 }}>
           <NextImage image={data.articles.data[0].attributes.image.data} />
         </Card>
       )}
@@ -104,6 +106,15 @@ export default function ArticleDetail() {
         </Typography>
       )}
       <CkContent content={data?.articles?.data?.[0].attributes?.content} />
+      <FacebookShareButton
+        url={`https://datvanguoibariavungtau.com/article/${
+          data?.articles?.data?.[0].attributes?.slug ?? ''
+        }`}
+      >
+        <Button variant="contained" startIcon={<Facebook />}>
+          Chia sẻ bài viết
+        </Button>
+      </FacebookShareButton>
       <Paper variant="outlined" sx={{ mt: 2 }}>
         <Box
           component="form"

@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Box, CardActionArea } from '@mui/material';
 import Link from './Link';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import dayjs from 'dayjs';
 
 interface ArticleCardProps {
   title: string;
@@ -29,7 +30,7 @@ export function ArticleCard({
         subheader={
           <Box display="flex" alignItems="center">
             <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
-            02/01/2022
+            {dayjs(publishedAt).format('DD/MM/YYYY')}
           </Box>
         }
       />

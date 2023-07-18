@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Box, CardActionArea } from '@mui/material';
 import Link from './Link';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import dayjs from 'dayjs';
 
 interface TopicCardProps {
   title: string;
@@ -30,8 +31,7 @@ export function TopicCard({
           subheader={
             <Box display="flex" alignItems="center">
               <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
-              {/* {dayjs(publishedAt).subtract(1, 'year').format('DD/MM/YYYY')} */}
-              02/01/2022
+              {dayjs(publishedAt).format('DD/MM/YYYY')}
             </Box>
           }
         />

@@ -3,14 +3,27 @@ import {
   useChapsQuery,
   useHomepageQuery,
   useInfiniteChapsQuery,
+  useMenuQuery,
 } from '@/generated/graphql';
 import { getStrapiFile } from '@/lib/media';
-import { Grid, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import { ChapCard } from '@/components/ChapCard';
 import { Seo } from '@/components/Seo';
 import { getStaticPropsFunc } from '@/lib/next-static-props';
 import { useEffect, useRef } from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Link from '@/components/Link';
 
 const pageSize = 20;
 
@@ -43,6 +56,10 @@ export default function Home() {
 
   const { data: homePageData } = useHomepageQuery();
 
+  const { data: menuData } = useMenuQuery();
+
+  console.log(menuData);
+
   const ref = useRef<HTMLDivElement | null>(null);
 
   const entry = useIntersectionObserver(ref, {});
@@ -60,23 +77,98 @@ export default function Home() {
       {homePageData?.homepage?.data?.attributes?.seo && (
         <Seo seo={homePageData.homepage.data.attributes?.seo} />
       )}
-      <Typography mt={2} variant="h5" component="h5" mb={1} fontWeight="bold">
-        Danh sách chương
-      </Typography>
-      <Grid container spacing={2}>
-        {data?.pages.map((page) =>
-          page.chaps?.data.map((chap) => (
-            <Grid key={chap.id} item xs={12} sm={6} md={4} lg={3}>
-              <ChapCard
-                title={chap.attributes?.title ?? ''}
-                description={chap.attributes?.description ?? ''}
-                slug={chap.attributes?.slug ?? ''}
-                image={getStrapiFile(chap.attributes?.image.data)}
-                publishedAt={chap.attributes?.publishedAt}
-              />
-            </Grid>
-          ))
-        )}
+      <Grid container spacing={3}>
+        <Grid item sm={12} md={4}>
+          <Typography
+            mt={2}
+            variant="h5"
+            component="h5"
+            mb={1}
+            fontWeight="bold"
+          >
+            Chương
+          </Typography>
+          {menuData?.chaps?.data.map((chap) => (
+            <Accordion key={chap.attributes?.slug}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography whiteSpace="normal">
+                  {chap.attributes?.title}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography variant="h6" component="h6" fontWeight="bold">
+                  Chủ đề
+                </Typography>
+                {chap.attributes?.topics?.data.map((topic) => (
+                  <Accordion key={topic.attributes?.slug}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography whiteSpace="pre-wrap">
+                        {topic.attributes?.title}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography fontWeight="bold">Bài viết</Typography>
+                      <List sx={{ p: 0 }}>
+                        {topic.attributes?.articles?.data.map((article) => (
+                          <ListItem
+                            key={article.attributes?.slug}
+                            disablePadding
+                            divider
+                          >
+                            <ListItemButton
+                              LinkComponent={Link}
+                              href={`/article/${
+                                article.attributes?.slug ?? ''
+                              }`}
+                            >
+                              <ListItemText
+                                primary={article.attributes?.title}
+                              />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </Grid>
+        <Grid item sm={12} md={8}>
+          <Typography
+            mt={2}
+            variant="h5"
+            component="h5"
+            mb={1}
+            fontWeight="bold"
+          >
+            Danh sách chương
+          </Typography>
+          <Grid container spacing={2}>
+            {data?.pages.map((page) =>
+              page.chaps?.data.map((chap) => (
+                <Grid key={chap.id} item sm={12} md={6} lg={4} xl={3}>
+                  <ChapCard
+                    title={chap.attributes?.title ?? ''}
+                    description={chap.attributes?.description ?? ''}
+                    slug={chap.attributes?.slug ?? ''}
+                    image={getStrapiFile(chap.attributes?.image.data)}
+                    publishedAt={chap.attributes?.publishedAt}
+                  />
+                </Grid>
+              ))
+            )}
+          </Grid>
+        </Grid>
       </Grid>
     </>
   );

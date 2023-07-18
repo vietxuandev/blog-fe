@@ -82,7 +82,7 @@ export default function ChapDetail() {
     <>
       <Seo seo={seo} />
       {data?.chaps?.data?.[0].attributes?.image?.data && (
-        <Card sx={{ position: 'relative', height: 400 }}>
+        <Card sx={{ position: 'relative', height: 600 }}>
           <NextImage image={data.chaps.data[0].attributes.image.data} />
         </Card>
       )}

@@ -1,0 +1,26 @@
+query Menu {
+  chaps {
+    data {
+      attributes {
+        title
+        slug
+        topics {
+          data {
+            attributes {
+              title
+              slug
+              articles {
+                data {
+                  attributes {
+                    title
+                    slug
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import React from 'react';
 
 export function Footer() {
@@ -10,7 +9,7 @@ export function Footer() {
         py: 3,
         px: 2,
         mt: 'auto',
-        backgroundColor: blue[900],
+        backgroundColor: (theme) => theme.palette.primary.main,
         color: 'white',
       }}
     >

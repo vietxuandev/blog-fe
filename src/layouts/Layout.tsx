@@ -16,7 +16,7 @@ export const Layout = ({ children, window }: LayoutProps) => {
       display="flex"
       flexDirection="column"
       minHeight="100vh"
-      bgcolor="white"
+      bgcolor="Background"
     >
       <ProgressBar />
       <SearchAppBar window={window} />
