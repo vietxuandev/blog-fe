@@ -1,6 +1,6 @@
 import {
   ArticlesQueryVariables,
-  useChapsQuery,
+  // useChapsQuery,
   useHomepageQuery,
   useInfiniteChapsQuery,
   useMenuQuery,
@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { ChapCard } from '@/components/ChapCard';
 import { Seo } from '@/components/Seo';
-import { getStaticPropsFunc } from '@/lib/next-static-props';
+// import { getStaticPropsFunc } from '@/lib/next-static-props';
 import { useEffect, useRef } from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -172,16 +172,16 @@ export default function Home() {
   );
 }
 
-export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
-  await queryClient.prefetchQuery(
-    useChapsQuery.getKey(variables),
-    useChapsQuery.fetcher(variables)
-  );
+// export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
+//   await queryClient.prefetchQuery(
+//     useChapsQuery.getKey(variables),
+//     useChapsQuery.fetcher(variables)
+//   );
 
-  await queryClient.prefetchQuery(
-    useHomepageQuery.getKey(),
-    useHomepageQuery.fetcher()
-  );
+//   await queryClient.prefetchQuery(
+//     useHomepageQuery.getKey(),
+//     useHomepageQuery.fetcher()
+//   );
 
-  return {};
-});
+//   return {};
+// });
