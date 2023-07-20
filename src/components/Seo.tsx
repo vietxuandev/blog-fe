@@ -1,5 +1,4 @@
-import { SeoFragment } from '@/generated/graphql';
-import { useGlobal } from '@/hooks/useGlobal';
+import { SeoFragment, useGlobalQuery } from '@/generated/graphql';
 import { getStrapiFile } from '@/lib/media';
 import Head from 'next/head';
 
@@ -10,20 +9,28 @@ interface SeoProps {
 }
 
 export function Seo({ seo }: SeoProps) {
-  const { defaultSeo, siteName } = useGlobal();
+  const { data } = useGlobalQuery();
 
   const seoWithDefaults = {
-    ...defaultSeo,
+    ...data?.global?.data?.attributes?.defaultSeo,
     ...seo,
   };
 
   const fullSeo = {
     ...seoWithDefaults,
-    metaTitle: `${seoWithDefaults.metaTitle} | ${siteName ?? ''}`,
+    metaTitle: `${seoWithDefaults.metaTitle} | ${
+      data?.global?.data?.attributes?.siteName ?? ''
+    }`,
   };
 
   return (
     <Head>
+      {data?.global?.data?.attributes?.favicon.data && (
+        <link
+          rel="shortcut icon"
+          href={getStrapiFile(data.global.data.attributes.favicon.data)}
+        />
+      )}
       {fullSeo.metaTitle && (
         <>
           <title>{fullSeo.metaTitle}</title>

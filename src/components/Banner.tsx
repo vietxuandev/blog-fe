@@ -1,9 +1,9 @@
-import { useGlobal } from '@/hooks/useGlobal';
+import { useGlobalQuery } from '@/generated/graphql';
 import { Box, Typography } from '@mui/material';
 import { NextImage } from './NextImage';
 
 export function Banner() {
-  const { banner, defaultSeo } = useGlobal();
+  const { data } = useGlobalQuery();
 
   return (
     <Box
@@ -16,7 +16,9 @@ export function Banner() {
         alignItems: 'center',
       }}
     >
-      {banner?.data && <NextImage image={banner?.data} />}
+      {data?.global?.data?.attributes?.banner.data && (
+        <NextImage image={data.global.data.attributes.banner.data} />
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -50,7 +52,7 @@ export function Banner() {
             px: 2,
           }}
         >
-          {defaultSeo?.metaDescription}
+          {data?.global?.data?.attributes?.defaultSeo.metaDescription}
         </Typography>
       </Box>
       <Box
