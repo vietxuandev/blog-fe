@@ -25,16 +25,17 @@ export function ArticleCard({
 }: ArticleCardProps) {
   return (
     <Card>
-      <CardHeader
-        title={title}
-        subheader={
-          <Box display="flex" alignItems="center">
-            <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
-            {dayjs(publishedAt).format('DD/MM/YYYY')}
-          </Box>
-        }
-      />
       <CardActionArea component={Link} href={`/article/${slug}`}>
+        <CardHeader
+          title={title}
+          subheader={
+            <Box display="flex" alignItems="center">
+              <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
+              {dayjs(publishedAt).format('DD/MM/YYYY')}
+            </Box>
+          }
+        />
+
         <CardMedia
           component="img"
           height="194"
