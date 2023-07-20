@@ -58,8 +58,6 @@ export default function Home() {
 
   const { data: menuData } = useMenuQuery();
 
-  console.log(menuData);
-
   const ref = useRef<HTMLDivElement | null>(null);
 
   const entry = useIntersectionObserver(ref, {});
@@ -156,7 +154,7 @@ export default function Home() {
           <Grid container spacing={2}>
             {data?.pages.map((page) =>
               page.chaps?.data.map((chap) => (
-                <Grid key={chap.id} item sm={12} md={6} lg={4} xl={3}>
+                <Grid key={chap.id} item sm={12} md={6} lg={4}>
                   <ChapCard
                     title={chap.attributes?.title ?? ''}
                     description={chap.attributes?.description ?? ''}
