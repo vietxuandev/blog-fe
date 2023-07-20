@@ -111,9 +111,20 @@ export default function ArticleDetail() {
           data?.articles?.data?.[0].attributes?.slug ?? ''
         }`}
       >
-        <Button variant="contained" startIcon={<Facebook />}>
+        <Box
+          display="flex"
+          sx={{
+            bgcolor: (theme) => theme.palette.primary.main,
+            color: 'white',
+            py: 0.5,
+            px: 1,
+            borderRadius: 1,
+            mt: 1,
+          }}
+        >
+          <Facebook />
           Chia sẻ bài viết
-        </Button>
+        </Box>
       </FacebookShareButton>
       <Paper variant="outlined" sx={{ mt: 2 }}>
         <Box
