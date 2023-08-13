@@ -1,5 +1,5 @@
 import { CkContent } from '@/components';
-import { getStaticPropsFunc } from '@/lib';
+// import { getStaticPropsFunc } from '@/lib';
 import { useAboutQuery } from '@/generated/graphql';
 import { Typography } from '@mui/material';
 
@@ -21,11 +21,11 @@ export default function AboutPage() {
   );
 }
 
-export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
-  await queryClient.prefetchQuery(
-    useAboutQuery.getKey(),
-    useAboutQuery.fetcher()
-  );
+// export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
+//   await queryClient.prefetchQuery(
+//     useAboutQuery.getKey(),
+//     useAboutQuery.fetcher()
+//   );
 
-  return {};
-});
+//   return {};
+// });

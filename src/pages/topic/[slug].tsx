@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import {
   useTopicsQuery,
   useInfiniteArticlesQuery,
-  useArticlesQuery,
+  // useArticlesQuery,
 } from '@/generated/graphql';
 import {
-  getStaticPropsFunc,
-  getStaticPathsFunc,
+  // getStaticPropsFunc,
+  // getStaticPathsFunc,
   getNextPageParamFunc,
 } from '@/lib';
 import { Seo, NextImage, ArticleCard } from '@/components';
@@ -86,48 +86,48 @@ export default function TopicDetail() {
   );
 }
 
-export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
-  const { topics } = await queryClient.fetchQuery(
-    useTopicsQuery.getKey(),
-    useTopicsQuery.fetcher()
-  );
+// export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
+//   const { topics } = await queryClient.fetchQuery(
+//     useTopicsQuery.getKey(),
+//     useTopicsQuery.fetcher()
+//   );
 
-  return (
-    topics?.data.map((topic) => ({
-      params: {
-        slug: topic.attributes?.slug ?? '',
-      },
-    })) ?? []
-  );
-});
+//   return (
+//     topics?.data.map((topic) => ({
+//       params: {
+//         slug: topic.attributes?.slug ?? '',
+//       },
+//     })) ?? []
+//   );
+// });
 
-export const getStaticProps = getStaticPropsFunc(
-  async ({ queryClient, params }) => {
-    const variables = {
-      filters: {
-        slug: { eq: String(params?.slug) },
-      },
-    };
+// export const getStaticProps = getStaticPropsFunc(
+//   async ({ queryClient, params }) => {
+//     const variables = {
+//       filters: {
+//         slug: { eq: String(params?.slug) },
+//       },
+//     };
 
-    const articlesVariables = {
-      ...defaultVariablesWithSort,
-      filters: {
-        topic: {
-          slug: { eq: String(params?.slug) },
-        },
-      },
-    };
+//     const articlesVariables = {
+//       ...defaultVariablesWithSort,
+//       filters: {
+//         topic: {
+//           slug: { eq: String(params?.slug) },
+//         },
+//       },
+//     };
 
-    await queryClient.prefetchQuery(
-      useTopicsQuery.getKey(variables),
-      useTopicsQuery.fetcher(variables)
-    );
+//     await queryClient.prefetchQuery(
+//       useTopicsQuery.getKey(variables),
+//       useTopicsQuery.fetcher(variables)
+//     );
 
-    await queryClient.prefetchQuery(
-      useInfiniteArticlesQuery.getKey(articlesVariables),
-      useArticlesQuery.fetcher(articlesVariables)
-    );
+//     await queryClient.prefetchQuery(
+//       useInfiniteArticlesQuery.getKey(articlesVariables),
+//       useArticlesQuery.fetcher(articlesVariables)
+//     );
 
-    return {};
-  }
-);
+//     return {};
+//   }
+// );
