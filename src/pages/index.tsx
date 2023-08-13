@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import { ExpandMore } from '@mui/icons-material';
+import Link from 'next/link';
 
 import {
   useChapsQuery,
@@ -18,7 +19,7 @@ import {
   useInfiniteChapsQuery,
   useMenuQuery,
 } from '@/generated/graphql';
-import { Seo, Link, ArticleCard } from '@/components';
+import { Seo, ArticleCard } from '@/components';
 import { getStaticPropsFunc, getNextPageParamFunc } from '@/lib';
 import { useIntersectionObserver } from '@/hooks';
 import { defaultVariables } from '@/constants';
@@ -160,6 +161,11 @@ export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
   await queryClient.prefetchQuery(
     useHomepageQuery.getKey(),
     useHomepageQuery.fetcher()
+  );
+
+  await queryClient.prefetchQuery(
+    useMenuQuery.getKey(),
+    useMenuQuery.fetcher()
   );
 
   return {};

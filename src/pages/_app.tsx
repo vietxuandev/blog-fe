@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { createEmotionCache } from '@/lib';
-import theme from '@/styles/theme';
+import { theme } from '@/styles';
 import { Layout } from '@/layouts';
 
 import '@/styles/globals.css';

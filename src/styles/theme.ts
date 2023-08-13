@@ -10,7 +10,7 @@ export const roboto = Roboto({
 });
 
 // Create a theme instance.
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: blue[900],
@@ -26,5 +26,3 @@ const theme = createTheme({
     fontFamily: ['Quicksand', 'Bargitta'].join(','),
   },
 });
-
-export default theme;

@@ -10,7 +10,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import { AppType } from 'next/app';
 
 import { MyAppProps } from './_app';
-import theme, { roboto } from '@/styles/theme';
+import { theme, roboto } from '@/styles';
 import { createEmotionCache } from '@/lib';
 
 interface MyDocumentProps extends DocumentProps {

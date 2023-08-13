@@ -9,10 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 import { FileFragment } from '@/generated/graphql';
 
-import { Link, NextImage } from '.';
+import { NextImage } from '.';
 
 interface ArticleCardProps {
   title: string;
