@@ -1,15 +1,17 @@
-import '@/styles/globals.css';
-import '@/styles/content-styles.css';
 import Head from 'next/head';
-import { type AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { CacheProvider, type EmotionCache } from '@emotion/react';
-import createEmotionCache from '@/createEmotionCache';
-import theme from '@/styles/theme';
+import { CssBaseline } from '@mui/material';
+import { CacheProvider, EmotionCache } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Layout } from '@/layouts/Layout';
+
+import { createEmotionCache } from '@/lib';
+import theme from '@/styles/theme';
+import { Layout } from '@/layouts';
+
+import '@/styles/globals.css';
+import '@/styles/content-styles.css';
 
 const clientSideEmotionCache = createEmotionCache();
 

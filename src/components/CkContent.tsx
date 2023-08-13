@@ -1,11 +1,10 @@
-import { getStrapiURL } from '@/lib/media';
-import { FC } from 'react';
+import { getStrapiURL } from '@/lib';
 
 interface CkContentProps {
   content?: string;
 }
 
-export const CkContent: FC<CkContentProps> = ({ content }) => {
+export function CkContent({ content }: CkContentProps) {
   if (!content) {
     return null;
   }
@@ -17,4 +16,4 @@ export const CkContent: FC<CkContentProps> = ({ content }) => {
       }}
     />
   );
-};
+}

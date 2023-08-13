@@ -1,11 +1,9 @@
-import { CkContent } from '@/components/CkContent';
-import { CommentListItem } from '@/components/CommentListItem';
-import {
-  useArticlesQuery,
-  useCommentsQuery,
-  useCreateCommentMutation,
-} from '@/generated/graphql';
-// import { getStaticPropsFunc } from '@/lib/next-static-props';
+import { useRouter } from 'next/router';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { FacebookShareButton } from 'react-share';
+import { Facebook } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -15,15 +13,20 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-// import { QueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { NextImage } from '@/components/NextImage';
-import { Seo } from '@/components/Seo';
-import { FacebookShareButton } from 'react-share';
-import { Facebook } from '@mui/icons-material';
+
+import { CkContent, CommentListItem, NextImage, Seo } from '@/components';
+import {
+  useArticlesQuery,
+  useCreateCommentMutation,
+  useInfiniteCommentsQuery,
+} from '@/generated/graphql';
+import {
+  getStaticPropsFunc,
+  getStaticPathsFunc,
+  getNextPageParamFunc,
+} from '@/lib';
+import { defaultSort } from '@/constants';
+import { useInfinityScroll } from '@/hooks';
 
 type Comment = { name: string; content: string };
 
@@ -54,14 +57,25 @@ export default function ArticleDetail() {
     },
   });
 
-  const { data: commentsData, refetch } = useCommentsQuery({
-    filters: {
-      article: {
-        slug: { eq: String(slug) },
+  const {
+    data: commentsData,
+    refetch,
+    fetchNextPage,
+  } = useInfiniteCommentsQuery(
+    'pagination',
+    {
+      filters: {
+        article: {
+          slug: { eq: String(slug) },
+        },
       },
+      sort: defaultSort,
     },
-    sort: 'createdAt:desc',
-  });
+    {
+      getNextPageParam: (lastPage) =>
+        getNextPageParamFunc(lastPage.comments?.meta.pagination),
+    }
+  );
 
   const { mutate } = useCreateCommentMutation();
 
@@ -79,6 +93,8 @@ export default function ArticleDetail() {
     );
   };
 
+  const ref = useInfinityScroll(fetchNextPage);
+
   const seo = {
     metaTitle: data?.articles?.data?.[0].attributes?.title ?? '',
     metaDescription: data?.articles?.data?.[0].attributes?.description ?? '',
@@ -90,7 +106,7 @@ export default function ArticleDetail() {
     <>
       <Seo seo={seo} />
       {data?.articles?.data?.[0].attributes?.image?.data && (
-        <Card sx={{ position: 'relative', height: 600 }}>
+        <Card sx={{ position: 'relative', pb: '50%' }}>
           <NextImage image={data.articles.data[0].attributes.image.data} />
         </Card>
       )}
@@ -161,50 +177,51 @@ export default function ArticleDetail() {
           </Button>
         </Box>
         <List>
-          {commentsData?.comments?.data.map((comment) => (
-            <CommentListItem
-              key={comment.id}
-              name={comment.attributes?.name ?? ''}
-              content={comment.attributes?.content ?? ''}
-              createdAt={comment.attributes?.createdAt}
-            />
-          ))}
+          {commentsData?.pages.map((page) =>
+            page.comments?.data.map((comment) => (
+              <CommentListItem
+                key={comment.id}
+                name={comment.attributes?.name ?? ''}
+                content={comment.attributes?.content ?? ''}
+                createdAt={comment.attributes?.createdAt}
+              />
+            ))
+          )}
         </List>
+        <Box ref={ref} />
       </Paper>
     </>
   );
 }
 
-// export const getStaticPaths = async () => {
-//   const queryClient = new QueryClient();
-//   const data = await queryClient.fetchQuery(
-//     useArticlesQuery.getKey(),
-//     useArticlesQuery.fetcher()
-//   );
+export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
+  const { articles } = await queryClient.fetchQuery(
+    useArticlesQuery.getKey(),
+    useArticlesQuery.fetcher()
+  );
 
-//   return {
-//     paths: (data.articles?.data ?? []).map((article) => ({
-//       params: {
-//         slug: article.attributes?.slug ?? '',
-//       },
-//     })),
-//     fallback: false,
-//   };
-// };
+  return (
+    articles?.data.map((article) => ({
+      params: {
+        slug: article.attributes?.slug ?? '',
+      },
+    })) ?? []
+  );
+});
 
-// export const getStaticProps = getStaticPropsFunc(
-//   async ({ queryClient, params }) => {
-//     const variables = {
-//       filters: {
-//         chap: { slug: { eq: params?.slug } },
-//       },
-//     };
+export const getStaticProps = getStaticPropsFunc(
+  async ({ queryClient, params }) => {
+    const variables = {
+      filters: {
+        slug: { eq: String(params?.slug) },
+      },
+    };
 
-//     await queryClient.prefetchQuery(
-//       useArticlesQuery.getKey(variables),
-//       useArticlesQuery.fetcher(variables)
-//     );
+    await queryClient.prefetchQuery(
+      useArticlesQuery.getKey(variables),
+      useArticlesQuery.fetcher(variables)
+    );
 
-//     return {};
-//   }
-// );
+    return {};
+  }
+);

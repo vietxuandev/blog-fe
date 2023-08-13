@@ -1,25 +1,19 @@
-import { TopicCard } from '@/components/TopicCard';
+import { Box, Card, Grid, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+
 import {
-  //   useTopicsQuery,
+  useTopicsQuery,
   useChapsQuery,
   useInfiniteTopicsQuery,
 } from '@/generated/graphql';
-import { Box, Card, Grid, Typography } from '@mui/material';
-// import { QueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import { getStrapiFile } from '@/lib/media';
-// import { getStaticPropsFunc } from '@/lib/next-static-props';
-import { Seo } from '@/components/Seo';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useEffect, useRef } from 'react';
-import { NextImage } from '@/components/NextImage';
-
-const pageSize = 20;
-
-const pagination = {
-  page: 1,
-  pageSize,
-};
+import {
+  getStaticPropsFunc,
+  getNextPageParamFunc,
+  getStaticPathsFunc,
+} from '@/lib';
+import { Seo, NextImage, ArticleCard } from '@/components';
+import { defaultVariablesWithSort } from '@/constants';
+import { useInfinityScroll } from '@/hooks';
 
 export default function ChapDetail() {
   const router = useRouter();
@@ -35,54 +29,32 @@ export default function ChapDetail() {
   const { data: topicsData, fetchNextPage } = useInfiniteTopicsQuery(
     'pagination',
     {
+      ...defaultVariablesWithSort,
       filters: {
         chap: {
           slug: { eq: String(slug) },
         },
       },
-      pagination,
-      sort: 'createdAt:desc',
     },
     {
-      getNextPageParam(lastPage) {
-        const page = lastPage.topics?.meta.pagination.page ?? 0;
-        const pageCount = lastPage.topics?.meta.pagination.pageCount ?? 0;
-        if (page < pageCount) {
-          return {
-            pagination: {
-              page: (lastPage.topics?.meta.pagination.page ?? 0) + 1,
-              pageSize,
-            },
-          };
-        }
-      },
+      getNextPageParam: (lastPage) =>
+        getNextPageParamFunc(lastPage.topics?.meta.pagination),
     }
   );
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const entry = useIntersectionObserver(ref, {});
-
-  const isVisible = !!entry?.isIntersecting;
+  const ref = useInfinityScroll(fetchNextPage);
 
   const seo = {
     metaTitle: data?.chaps?.data?.[0].attributes?.title ?? '',
     metaDescription: data?.chaps?.data?.[0].attributes?.description ?? '',
     shareImage: data?.chaps?.data?.[0].attributes?.image,
-    article: true,
   };
-
-  useEffect(() => {
-    if (isVisible) {
-      fetchNextPage();
-    }
-  }, [fetchNextPage, isVisible]);
 
   return (
     <>
       <Seo seo={seo} />
       {data?.chaps?.data?.[0].attributes?.image?.data && (
-        <Card sx={{ position: 'relative', height: 600 }}>
+        <Card sx={{ position: 'relative', pb: '50%' }}>
           <NextImage image={data.chaps.data[0].attributes.image.data} />
         </Card>
       )}
@@ -96,14 +68,14 @@ export default function ChapDetail() {
       </Box>
       <Grid container spacing={2}>
         {topicsData?.pages.map((page) =>
-          page.topics?.data.map((article) => (
-            <Grid key={article.id} item xs={12} sm={6} md={4} lg={3}>
-              <TopicCard
-                title={article.attributes?.title ?? ''}
-                description={article.attributes?.description ?? ''}
-                slug={article.attributes?.slug ?? ''}
-                image={getStrapiFile(article.attributes?.image.data)}
-                publishedAt={article.attributes?.publishedAt}
+          page.topics?.data.map((topic) => (
+            <Grid key={topic.id} item xs={12} sm={6} md={4} lg={3}>
+              <ArticleCard
+                title={topic.attributes?.title ?? ''}
+                description={topic.attributes?.description ?? ''}
+                href={`/topic/${topic.attributes?.slug ?? ''}`}
+                image={topic.attributes?.image.data}
+                publishedAt={topic.attributes?.publishedAt}
               />
             </Grid>
           ))
@@ -114,48 +86,46 @@ export default function ChapDetail() {
   );
 }
 
-// export const getStaticPaths = async () => {
-//   const queryClient = new QueryClient();
+export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
+  const { chaps } = await queryClient.fetchQuery(
+    useChapsQuery.getKey(),
+    useChapsQuery.fetcher()
+  );
 
-//   const topicsData = await queryClient.fetchQuery(
-//     useChapsQuery.getKey(),
-//     useChapsQuery.fetcher()
-//   );
+  return (
+    chaps?.data.map((chap) => ({
+      params: {
+        slug: chap.attributes?.slug ?? '',
+      },
+    })) ?? []
+  );
+});
 
-//   return {
-//     paths: (topicsData.chaps?.data ?? []).map((chap) => ({
-//       params: {
-//         slug: chap.attributes?.slug ?? '',
-//       },
-//     })),
-//     fallback: false,
-//   };
-// };
+export const getStaticProps = getStaticPropsFunc(
+  async ({ queryClient, params }) => {
+    const variables = {
+      filters: {
+        slug: { eq: String(params?.slug) },
+      },
+    };
 
-// export const getStaticProps = getStaticPropsFunc(
-//   async ({ queryClient, params }) => {
-//     const variables = {
-//       filters: {
-//         slug: { eq: params?.slug },
-//       },
-//     };
+    const topicsVariables = {
+      ...defaultVariablesWithSort,
+      filters: {
+        chap: { slug: { eq: String(params?.slug) } },
+      },
+    };
 
-//     const topicsVariables = {
-//       filters: {
-//         chap: { slug: { eq: params?.slug } },
-//       },
-//       pagination,
-//     };
+    await queryClient.prefetchQuery(
+      useChapsQuery.getKey(variables),
+      useChapsQuery.fetcher(variables)
+    );
 
-//     await queryClient.prefetchQuery(
-//       useChapsQuery.getKey(variables),
-//       useChapsQuery.fetcher(variables)
-//     );
+    await queryClient.prefetchQuery(
+      useInfiniteTopicsQuery.getKey(topicsVariables),
+      useTopicsQuery.fetcher(topicsVariables)
+    );
 
-//     await queryClient.prefetchQuery(
-//       useTopicsQuery.getKey(topicsVariables),
-//       useTopicsQuery.fetcher(topicsVariables)
-//     );
-//     return {};
-//   }
-// );
+    return {};
+  }
+);

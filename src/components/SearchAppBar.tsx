@@ -1,29 +1,29 @@
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import {
+  alpha,
+  AppBar,
+  Box,
   Button,
   Drawer,
+  IconButton,
+  InputBase,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Slide,
+  styled,
+  Toolbar,
   useScrollTrigger,
 } from '@mui/material';
-import Link from './Link';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
-import { Home, Info } from '@mui/icons-material';
+import { Home, Info, Menu, Search as SearchIcon } from '@mui/icons-material';
+
+import { Link } from '.';
 
 type Inputs = { q: string };
 
@@ -153,7 +153,7 @@ export function SearchAppBar({ window }: SearchAppBarProps) {
               sx={{ mr: 2, display: { xs: 'flex', sm: 'none' } }}
               onClick={toggleDrawer(true)}
             >
-              <MenuIcon />
+              <Menu />
             </IconButton>
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
               <Search>

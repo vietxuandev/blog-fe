@@ -1,8 +1,9 @@
-import { ArticleCard } from '@/components/ArticleCard';
-import { useArticlesQuery } from '@/generated/graphql';
 import { Container, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getStrapiFile } from '@/lib/media';
+
+import { ArticleCard } from '@/components';
+import { useArticlesQuery } from '@/generated/graphql';
+import { defaultSort } from '@/constants';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function SearchPage() {
         },
       ],
     },
-    sort: 'createdAt:desc',
+    sort: defaultSort,
   });
 
   return (
@@ -35,8 +36,8 @@ export default function SearchPage() {
             <ArticleCard
               title={article.attributes?.title ?? ''}
               description={article.attributes?.description ?? ''}
-              slug={article.attributes?.slug ?? ''}
-              image={getStrapiFile(article.attributes?.image.data)}
+              href={`/article/${article.attributes?.slug ?? ''}`}
+              image={article.attributes?.image.data}
               publishedAt={article.attributes?.publishedAt}
             />
           </Grid>

@@ -1,15 +1,11 @@
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
-import Zoom from '@mui/material/Zoom';
-import { FC } from 'react';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { KeyboardArrowUp } from '@mui/icons-material';
+import { Box, Fab, useScrollTrigger, Zoom } from '@mui/material';
 
 interface ScrollTopProps {
   window?: () => Window;
 }
 
-export const ScrollTop: FC<ScrollTopProps> = ({ window }) => {
+export function ScrollTop({ window }: ScrollTopProps) {
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
     disableHysteresis: true,
@@ -36,9 +32,9 @@ export const ScrollTop: FC<ScrollTopProps> = ({ window }) => {
         sx={{ position: 'fixed', bottom: 16, right: 16 }}
       >
         <Fab size="small" aria-label="scroll back to top">
-          <KeyboardArrowUpIcon />
+          <KeyboardArrowUp />
         </Fab>
       </Box>
     </Zoom>
   );
-};
+}

@@ -1,6 +1,7 @@
-import { useGlobalQuery } from '@/generated/graphql';
 import { Box, Typography } from '@mui/material';
-import { NextImage } from './NextImage';
+import { useGlobalQuery } from '@/generated/graphql';
+
+import { NextImage } from '.';
 
 export function Banner() {
   const { data } = useGlobalQuery();

@@ -1,4 +1,4 @@
-import { getStrapiURL } from '@/lib/media';
+import { getStrapiURL } from '@/lib';
 import {
   useQuery,
   useInfiniteQuery,

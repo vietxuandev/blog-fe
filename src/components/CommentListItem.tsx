@@ -5,8 +5,9 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { stringAvatar } from '@/lib/string-avatar';
 import dayjs from 'dayjs';
+
+import { stringAvatar } from '@/lib';
 
 interface CommentListItemProps {
   name: string;
@@ -14,11 +15,11 @@ interface CommentListItemProps {
   createdAt: string;
 }
 
-export const CommentListItem = ({
+export function CommentListItem({
   name,
   content,
   createdAt,
-}: CommentListItemProps) => {
+}: CommentListItemProps) {
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
@@ -41,4 +42,4 @@ export const CommentListItem = ({
       />
     </ListItem>
   );
-};
+}

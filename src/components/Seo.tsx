@@ -1,6 +1,7 @@
-import { SeoFragment, useGlobalQuery } from '@/generated/graphql';
-import { getStrapiFile } from '@/lib/media';
 import Head from 'next/head';
+
+import { SeoFragment, useGlobalQuery } from '@/generated/graphql';
+import { getStrapiFile } from '@/lib';
 
 interface SeoProps {
   seo: SeoFragment & {
@@ -58,7 +59,7 @@ export function Seo({ seo }: SeoProps) {
           <meta name="image" content={getStrapiFile(fullSeo.shareImage.data)} />
         </>
       )}
-      {fullSeo?.article && <meta property="og:type" content="article" />}
+      {fullSeo.article && <meta property="og:type" content="article" />}
       <meta name="twitter:card" content="summary_large_image" />
     </Head>
   );

@@ -1,9 +1,10 @@
-import { FileFragment } from '@/generated/graphql';
-import { getStrapiFile } from '@/lib/media';
 import Image from 'next/image';
 
+import { FileFragment } from '@/generated/graphql';
+import { getStrapiFile } from '@/lib';
+
 interface ImageProps {
-  image?: FileFragment;
+  image?: FileFragment | null;
 }
 
 export const NextImage = ({ image }: ImageProps) => {
