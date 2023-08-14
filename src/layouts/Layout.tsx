@@ -14,12 +14,7 @@ interface LayoutProps extends PropsWithChildren {
 
 export const Layout = ({ children, window }: LayoutProps) => {
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      minHeight="100vh"
-      bgcolor="white"
-    >
+    <Box display="flex" flexDirection="column" minHeight="100vh">
       <ProgressBar />
       <SearchAppBar window={window} />
       <Toolbar id="back-to-top-anchor" />
