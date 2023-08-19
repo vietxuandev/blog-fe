@@ -5,7 +5,7 @@ import {
   ScrollTop,
   SearchAppBar,
 } from '@/components';
-import { Box, Container, Toolbar } from '@mui/material';
+import { Box, Container, Paper, Toolbar } from '@mui/material';
 import { PropsWithChildren } from 'react';
 
 interface LayoutProps extends PropsWithChildren {
@@ -19,8 +19,10 @@ export const Layout = ({ children, window }: LayoutProps) => {
       <SearchAppBar window={window} />
       <Toolbar id="back-to-top-anchor" />
       <Banner />
-      <Container maxWidth="lg" sx={{ my: 2 }}>
-        {children}
+      <Container maxWidth="xl" sx={{ my: 2 }}>
+        <Paper elevation={0} sx={{ p: 2 }}>
+          {children}
+        </Paper>
       </Container>
       <ScrollTop window={window} />
       <Footer />

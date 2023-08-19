@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Grid,
   List,
   ListItem,
@@ -9,7 +10,6 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { useEffect, useRef } from 'react';
 import { ExpandMore } from '@mui/icons-material';
 import Link from 'next/link';
 
@@ -21,11 +21,11 @@ import {
 } from '@/generated/graphql';
 import { Seo, ArticleCard } from '@/components';
 import { getNextPageParamFunc } from '@/lib';
-import { useIntersectionObserver } from '@/hooks';
+import { useInfinityScroll } from '@/hooks';
 import { defaultVariables } from '@/constants';
 
 export default function Home() {
-  const { data, fetchNextPage } = useInfiniteChapsQuery(
+  const { data, fetchNextPage, isLoading, isFetching } = useInfiniteChapsQuery(
     'pagination',
     defaultVariables,
     {
@@ -38,17 +38,7 @@ export default function Home() {
 
   const { data: menuData } = useMenuQuery();
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const entry = useIntersectionObserver(ref, {});
-
-  const isVisible = !!entry?.isIntersecting;
-
-  useEffect(() => {
-    if (isVisible) {
-      fetchNextPage();
-    }
-  }, [fetchNextPage, isVisible]);
+  const ref = useInfinityScroll(fetchNextPage);
 
   return (
     <>
@@ -67,7 +57,7 @@ export default function Home() {
             Chương
           </Typography>
           {menuData?.chaps?.data.map((chap) => (
-            <Accordion key={chap.attributes?.slug}>
+            <Accordion key={chap.attributes?.slug} variant="outlined">
               <AccordionSummary
                 expandIcon={<ExpandMore />}
                 aria-controls="panel1a-content"
@@ -82,7 +72,7 @@ export default function Home() {
                   Chủ đề
                 </Typography>
                 {chap.attributes?.topics?.data.map((topic) => (
-                  <Accordion key={topic.attributes?.slug}>
+                  <Accordion key={topic.attributes?.slug} variant="outlined">
                     <AccordionSummary
                       expandIcon={<ExpandMore />}
                       aria-controls="panel1a-content"
@@ -121,7 +111,7 @@ export default function Home() {
             </Accordion>
           ))}
         </Grid>
-        <Grid item sm={12} md={8}>
+        <Grid item sm={12} md={8} width="100%">
           <Typography
             mt={2}
             variant="h5"
@@ -134,7 +124,7 @@ export default function Home() {
           <Grid container spacing={2}>
             {data?.pages.map((page) =>
               page.chaps?.data.map((chap) => (
-                <Grid key={chap.id} item sm={12} md={6} lg={4}>
+                <Grid key={chap.id} item xs={12} md={6} lg={4}>
                   <ArticleCard
                     title={chap.attributes?.title ?? ''}
                     description={chap.attributes?.description ?? ''}
@@ -145,9 +135,18 @@ export default function Home() {
                 </Grid>
               ))
             )}
+            {(isLoading || isFetching) &&
+              Array(12)
+                .fill(null)
+                .map((_, index) => (
+                  <Grid key={index} item xs={12} md={6} lg={4}>
+                    <ArticleCard isLoading />
+                  </Grid>
+                ))}
           </Grid>
         </Grid>
       </Grid>
+      <Box ref={ref} />
     </>
   );
 }

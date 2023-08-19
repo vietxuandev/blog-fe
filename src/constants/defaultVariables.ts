@@ -1,6 +1,6 @@
 export const defaultPage = 1;
 
-export const defaultPageSize = 20;
+export const defaultPageSize = 12;
 
 export const defaultSort = 'createdAt:desc';
 

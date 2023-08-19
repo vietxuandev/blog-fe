@@ -25,7 +25,7 @@ import {
   // getStaticPathsFunc,
   getNextPageParamFunc,
 } from '@/lib';
-import { defaultSort } from '@/constants';
+import { defaultVariablesWithSort } from '@/constants';
 import { useInfinityScroll } from '@/hooks';
 
 type Comment = { name: string; content: string };
@@ -61,15 +61,17 @@ export default function ArticleDetail() {
     data: commentsData,
     refetch,
     fetchNextPage,
+    isFetching,
+    isLoading,
   } = useInfiniteCommentsQuery(
     'pagination',
     {
+      ...defaultVariablesWithSort,
       filters: {
         article: {
           slug: { eq: String(slug) },
         },
       },
-      sort: defaultSort,
     },
     {
       getNextPageParam: (lastPage) =>
@@ -187,6 +189,10 @@ export default function ArticleDetail() {
               />
             ))
           )}
+          {(isLoading || isFetching) &&
+            Array(4)
+              .fill(null)
+              .map((_, index) => <CommentListItem key={index} isLoading />)}
         </List>
         <Box ref={ref} />
       </Paper>

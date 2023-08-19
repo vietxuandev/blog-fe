@@ -1,11 +1,10 @@
-import { AccessTime } from '@mui/icons-material';
 import {
-  Box,
   Card,
   CardActionArea,
   CardContent,
   CardHeader,
   CardMedia,
+  Skeleton,
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
@@ -15,13 +14,25 @@ import { FileFragment } from '@/generated/graphql';
 
 import { NextImage } from '.';
 
-interface ArticleCardProps {
+interface ArticleCardDataProps {
   title: string;
   description: string;
   href: string;
   image?: FileFragment | null;
   publishedAt: string;
+  isLoading?: undefined;
 }
+
+interface ArticleCardLoadingProps {
+  title?: string;
+  description?: string;
+  href?: string;
+  image?: FileFragment | null;
+  publishedAt?: string;
+  isLoading: true;
+}
+
+type ArticleCardProps = ArticleCardDataProps | ArticleCardLoadingProps;
 
 export function ArticleCard({
   title,
@@ -29,17 +40,33 @@ export function ArticleCard({
   href,
   image,
   publishedAt,
+  isLoading,
 }: ArticleCardProps) {
   return (
-    <Card>
-      <CardActionArea component={Link} href={href}>
+    <Card variant="outlined">
+      <CardActionArea
+        {...(!isLoading && {
+          component: Link,
+          href,
+        })}
+      >
         <CardHeader
-          title={title}
+          title={
+            isLoading ? (
+              <>
+                <Skeleton animation="wave" height={32} />
+                <Skeleton animation="wave" height={32} width="80%" />
+              </>
+            ) : (
+              title
+            )
+          }
           subheader={
-            <Box display="flex" alignItems="center">
-              <AccessTime fontSize="small" sx={{ mr: 1 }} />
-              {dayjs(publishedAt).format('DD/MM/YYYY')}
-            </Box>
+            isLoading ? (
+              <Skeleton animation="wave" height={24} width="40%" />
+            ) : (
+              dayjs(publishedAt).format('DD/MM/YYYY')
+            )
           }
           titleTypographyProps={{
             sx: {
@@ -53,25 +80,36 @@ export function ArticleCard({
             },
           }}
         />
-        <CardMedia component="div" sx={{ position: 'relative', pb: '75%' }}>
-          <NextImage image={image} />
-        </CardMedia>
+        {isLoading ? (
+          <Skeleton sx={{ pb: '75%' }} animation="wave" variant="rectangular" />
+        ) : (
+          <CardMedia sx={{ position: 'relative', pb: '75%' }}>
+            <NextImage image={image} />
+          </CardMedia>
+        )}
         <CardContent>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              height: '40px',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              wordBreak: 'break-word',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-            }}
-          >
-            {description}
-          </Typography>
+          {isLoading ? (
+            <>
+              <Skeleton animation="wave" height={20} />
+              <Skeleton animation="wave" height={20} width="80%" />
+            </>
+          ) : (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                height: '40px',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                wordBreak: 'break-word',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+              }}
+            >
+              {description}
+            </Typography>
+          )}
         </CardContent>
       </CardActionArea>
     </Card>

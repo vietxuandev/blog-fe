@@ -26,7 +26,12 @@ export default function ChapDetail() {
     },
   });
 
-  const { data: topicsData, fetchNextPage } = useInfiniteTopicsQuery(
+  const {
+    data: topicsData,
+    fetchNextPage,
+    isLoading,
+    isFetching,
+  } = useInfiniteTopicsQuery(
     'pagination',
     {
       ...defaultVariablesWithSort,
@@ -80,6 +85,14 @@ export default function ChapDetail() {
             </Grid>
           ))
         )}
+        {(isLoading || isFetching) &&
+          Array(12)
+            .fill(null)
+            .map((_, index) => (
+              <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+                <ArticleCard isLoading />
+              </Grid>
+            ))}
       </Grid>
       <Box ref={ref} />
     </>
