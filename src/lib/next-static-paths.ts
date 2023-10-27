@@ -20,7 +20,7 @@ export const getStaticPathsFunc = (
 
     return {
       paths,
-      fallback: 'blocking',
+      fallback: true,
     };
   };
 };

@@ -2,14 +2,14 @@ import { Box, Card, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
 import {
-  // useTopicsQuery,
+  useTopicsQuery,
   useChapsQuery,
   useInfiniteTopicsQuery,
 } from '@/generated/graphql';
 import {
-  // getStaticPropsFunc,
+  getStaticPropsFunc,
   getNextPageParamFunc,
-  // getStaticPathsFunc,
+  getStaticPathsFunc,
 } from '@/lib';
 import { Seo, NextImage, ArticleCard } from '@/components';
 import { defaultVariablesWithSort } from '@/constants';
@@ -99,46 +99,46 @@ export default function ChapDetail() {
   );
 }
 
-// export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
-//   const { chaps } = await queryClient.fetchQuery(
-//     useChapsQuery.getKey(),
-//     useChapsQuery.fetcher()
-//   );
+export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
+  const { chaps } = await queryClient.fetchQuery(
+    useChapsQuery.getKey(),
+    useChapsQuery.fetcher()
+  );
 
-//   return (
-//     chaps?.data.map((chap) => ({
-//       params: {
-//         slug: chap.attributes?.slug ?? '',
-//       },
-//     })) ?? []
-//   );
-// });
+  return (
+    chaps?.data.map((chap) => ({
+      params: {
+        slug: chap.attributes?.slug ?? '',
+      },
+    })) ?? []
+  );
+});
 
-// export const getStaticProps = getStaticPropsFunc(
-//   async ({ queryClient, params }) => {
-//     const variables = {
-//       filters: {
-//         slug: { eq: String(params?.slug) },
-//       },
-//     };
+export const getStaticProps = getStaticPropsFunc(
+  async ({ queryClient, params }) => {
+    const variables = {
+      filters: {
+        slug: { eq: String(params?.slug) },
+      },
+    };
 
-//     const topicsVariables = {
-//       ...defaultVariablesWithSort,
-//       filters: {
-//         chap: { slug: { eq: String(params?.slug) } },
-//       },
-//     };
+    const topicsVariables = {
+      ...defaultVariablesWithSort,
+      filters: {
+        chap: { slug: { eq: String(params?.slug) } },
+      },
+    };
 
-//     await queryClient.prefetchQuery(
-//       useChapsQuery.getKey(variables),
-//       useChapsQuery.fetcher(variables)
-//     );
+    await queryClient.prefetchQuery(
+      useChapsQuery.getKey(variables),
+      useChapsQuery.fetcher(variables)
+    );
 
-//     await queryClient.prefetchQuery(
-//       useInfiniteTopicsQuery.getKey(topicsVariables),
-//       useTopicsQuery.fetcher(topicsVariables)
-//     );
+    await queryClient.prefetchQuery(
+      useInfiniteTopicsQuery.getKey(topicsVariables),
+      useTopicsQuery.fetcher(topicsVariables)
+    );
 
-//     return {};
-//   }
-// );
+    return {};
+  }
+);

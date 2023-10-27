@@ -14,13 +14,13 @@ import { ExpandMore } from '@mui/icons-material';
 import Link from 'next/link';
 
 import {
-  // useChapsQuery,
+  useChapsQuery,
   useHomepageQuery,
   useInfiniteChapsQuery,
   useMenuQuery,
 } from '@/generated/graphql';
 import { Seo, ArticleCard } from '@/components';
-import { getNextPageParamFunc } from '@/lib';
+import { getNextPageParamFunc, getStaticPropsFunc } from '@/lib';
 import { useInfinityScroll } from '@/hooks';
 import { defaultVariables } from '@/constants';
 
@@ -151,21 +151,21 @@ export default function Home() {
   );
 }
 
-// export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
-//   await queryClient.prefetchQuery(
-//     useChapsQuery.getKey(defaultVariables),
-//     useChapsQuery.fetcher(defaultVariables)
-//   );
+export const getStaticProps = getStaticPropsFunc(async ({ queryClient }) => {
+  await queryClient.prefetchQuery(
+    useChapsQuery.getKey(defaultVariables),
+    useChapsQuery.fetcher(defaultVariables)
+  );
 
-//   await queryClient.prefetchQuery(
-//     useHomepageQuery.getKey(),
-//     useHomepageQuery.fetcher()
-//   );
+  await queryClient.prefetchQuery(
+    useHomepageQuery.getKey(),
+    useHomepageQuery.fetcher()
+  );
 
-//   await queryClient.prefetchQuery(
-//     useMenuQuery.getKey(),
-//     useMenuQuery.fetcher()
-//   );
+  await queryClient.prefetchQuery(
+    useMenuQuery.getKey(),
+    useMenuQuery.fetcher()
+  );
 
-//   return {};
-// });
+  return {};
+});

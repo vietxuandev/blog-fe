@@ -21,8 +21,8 @@ import {
   useInfiniteCommentsQuery,
 } from '@/generated/graphql';
 import {
-  // getStaticPropsFunc,
-  // getStaticPathsFunc,
+  getStaticPropsFunc,
+  getStaticPathsFunc,
   getNextPageParamFunc,
 } from '@/lib';
 import { defaultVariablesWithSort } from '@/constants';
@@ -200,34 +200,34 @@ export default function ArticleDetail() {
   );
 }
 
-// export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
-//   const { articles } = await queryClient.fetchQuery(
-//     useArticlesQuery.getKey(),
-//     useArticlesQuery.fetcher()
-//   );
+export const getStaticPaths = getStaticPathsFunc(async ({ queryClient }) => {
+  const { articles } = await queryClient.fetchQuery(
+    useArticlesQuery.getKey(),
+    useArticlesQuery.fetcher()
+  );
 
-//   return (
-//     articles?.data.map((article) => ({
-//       params: {
-//         slug: article.attributes?.slug ?? '',
-//       },
-//     })) ?? []
-//   );
-// });
+  return (
+    articles?.data.map((article) => ({
+      params: {
+        slug: article.attributes?.slug ?? '',
+      },
+    })) ?? []
+  );
+});
 
-// export const getStaticProps = getStaticPropsFunc(
-//   async ({ queryClient, params }) => {
-//     const variables = {
-//       filters: {
-//         slug: { eq: String(params?.slug) },
-//       },
-//     };
+export const getStaticProps = getStaticPropsFunc(
+  async ({ queryClient, params }) => {
+    const variables = {
+      filters: {
+        slug: { eq: String(params?.slug) },
+      },
+    };
 
-//     await queryClient.prefetchQuery(
-//       useArticlesQuery.getKey(variables),
-//       useArticlesQuery.fetcher(variables)
-//     );
+    await queryClient.prefetchQuery(
+      useArticlesQuery.getKey(variables),
+      useArticlesQuery.fetcher(variables)
+    );
 
-//     return {};
-//   }
-// );
+    return {};
+  }
+);
