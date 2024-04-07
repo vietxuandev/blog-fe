@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'strapi-iurp.onrender.com'],
+    domains: ['localhost', 'api.datvanguoibariavungtau.com'],
   },
 };
 
